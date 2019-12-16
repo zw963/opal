@@ -67,10 +67,12 @@ matrix:
       env: RUN=rspec
 
     - rvm: truffleruby
-      env: RUN=rspec
+      env:
+        - RUN=rspec
+        - TRUFFLERUBYOPT="--vm.Xmx6g"
 
     - rvm: jruby-9.2.9.0
-      env: 
+      env:
         - RUN=rspec
         - JRUBY_OPTS=--dev
 
