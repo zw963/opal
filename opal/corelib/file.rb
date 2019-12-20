@@ -1,3 +1,6 @@
+# use_strict: true
+# frozen_string_literal: true
+
 class File < IO
   Separator = SEPARATOR = '/'
   ALT_SEPARATOR = nil

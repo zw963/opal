@@ -2386,7 +2386,10 @@
   // @param name [String] the canonical name of the encoding
   Opal.set_encoding = function(str, name) {
     if (typeof str === 'string')
-      throw Opal.FrozenError.$new("can't modify frozen String");
+      throw Opal.FrozenError.$new(
+        "can't modify frozen String, tried to set encoding of " +
+        str.$inspect() + " to "+name
+      );
 
     var encoding = Opal.encodings[name];
 
