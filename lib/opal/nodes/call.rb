@@ -45,7 +45,7 @@ module Opal
         handle_special do
           compiler.method_calls << meth.to_sym if record_method?
 
-          # if trying to access an lvar in eval or irb mode
+          # if trying to access an lvar in eval
           return compile_eval_var if using_eval?
 
           # if trying to access an lvar in irb mode
@@ -164,11 +164,8 @@ module Opal
       end
 
       def compile_refinements
-        scope.collect_refinements_temps.map do |i|
-          s(:js_tmp, i)
-        end.yield_self do |i|
-          push expr(s(:array, *i)), ', '
-        end
+        refinements = scope.collect_refinements_temps.map { |i| s(:js_tmp, i) }
+        push expr(s(:array, *refinements)), ', '
       end
 
       def compile_break_catcher
@@ -209,7 +206,7 @@ module Opal
       end
 
       def compile_eval_var
-        push "#{meth}"
+        push meth.to_s
       end
 
       # a variable reference in irb mode in top scope might be a var ref,
@@ -375,19 +372,19 @@ module Opal
         push "self.$eval(#{temp}))"
       end
 
-      add_special :binding do |compile_default|
+      add_special :binding do
         push "Opal.Binding.$new("
-        push   "function($code, $value) {"
-        push     "if (typeof $value === 'undefined') {"
-        push       "return eval($code);"
-        push     "}"
-        push     "else {"
-        push       "return eval($code + ' = $value')"
-        push     "}"
-        push   "},"
-        push   scope.scope_locals.map(&:to_s).inspect, ","
-        push   "self,"
-        push   source_location
+        push "  function($code, $value) {"
+        push "    if (typeof $value === 'undefined') {"
+        push "      return eval($code);"
+        push "    }"
+        push "    else {"
+        push "      return eval($code + ' = $value');"
+        push "    }"
+        push "  },"
+        push "  ", scope.scope_locals.map(&:to_s).inspect, ","
+        push "  self,"
+        push "  ", source_location
         push ")"
       end
 

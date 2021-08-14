@@ -688,7 +688,7 @@ class Module
       }
       if (typeof self.$$refine_modules[mod_id] === "undefined") {
         m = self.$$refine_modules[mod_id] = #{::Module.new};
-      } 
+      }
       else {
         m = self.$$refine_modules[mod_id];
       }
@@ -702,6 +702,6 @@ class Module
 
   # Compiler overrides this method
   def using(mod)
-    raise RuntimeError, 'Module#using is not permitted in methods'
+    raise 'Module#using is not permitted in methods'
   end
 end

@@ -176,7 +176,7 @@ module Opal
       end
 
       def scope_locals
-        @locals | @args | ((@parent && @type == :iter) ? @parent.scope_locals : [])
+        @locals | @args | (@parent && @type == :iter ? @parent.scope_locals : [])
       end
 
       def add_scope_temp(tmp)
@@ -342,13 +342,11 @@ module Opal
       def collect_refinements_temps(temps = [])
         temps << @refinements_temp if @refinements_temp
         return parent.collect_refinements_temps(temps) if parent
-        return temps
+        temps
       end
 
       def new_refinements_temp
-        @@using_ctr ||= 0
-        var = "$refn_#{@@using_ctr}"
-        @@using_ctr += 1
+        var = compiler.unique_temp("$refn")
         add_scope_local(var)
         var
       end

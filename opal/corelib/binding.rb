@@ -2,7 +2,7 @@ class Binding
   # @private
   def initialize(jseval, scope_variables, receiver, source_location)
     @jseval, @scope_variables, @receiver, @source_location = \
-    jseval, scope_variables, receiver, source_location
+      jseval, scope_variables, receiver, source_location
   end
 
   def js_eval(*args)
@@ -12,7 +12,7 @@ class Binding
   def local_variable_get(symbol)
     js_eval(symbol)
   rescue Exception
-    raise NameError, "local variable `#{symbol}' is not defined for #{self.inspect}"
+    raise NameError, "local variable `#{symbol}' is not defined for #{inspect}"
   end
 
   def local_variable_set(symbol, value)
@@ -38,7 +38,7 @@ end
 
 module Kernel
   def binding
-    warn "This method is special - compiler support is missing"
+    raise "Opal doesn't support dynamic calls to binding"
   end
 end
 

@@ -8,5 +8,5 @@ end
 
 # Compiler overrides this method
 def using(mod)
-  raise RuntimeError, "main.using is permitted only at toplevel"
+  raise 'main.using is permitted only at toplevel'
 end
