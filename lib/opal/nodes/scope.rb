@@ -332,6 +332,32 @@ module Opal
         @next_retry_id ||= 'retry_0'
         @next_retry_id = @next_retry_id.succ
       end
+
+      def accepts_using?
+        # IterNode of a special kind of Module.new {} is accepted...
+        # though we don't check for it that thoroughly.
+        [TopNode, ModuleNode, ClassNode, IterNode].include? self.class
+      end
+
+      def collect_refinements_temps(temps = [])
+        temps << @refinements_temp if @refinements_temp
+        return parent.collect_refinements_temps(temps) if parent
+        return temps
+      end
+
+      def new_refinements_temp
+        @@using_ctr ||= 0
+        var = "$refn_#{@@using_ctr}"
+        @@using_ctr += 1
+        add_scope_local(var)
+        var
+      end
+
+      def refinements_temp
+        prev, curr = @refinements_temp, new_refinements_temp
+        @refinements_temp = curr
+        [prev, curr]
+      end
     end
   end
 end
