@@ -29,7 +29,7 @@ module Opal
         false
       end
 
-      attr_reader :compiler, :type, :sexp
+      attr_reader :compiler, :type
 
       def initialize(sexp, level, compiler)
         @sexp = sexp
@@ -73,8 +73,8 @@ module Opal
         push post
       end
 
-      def fragment(str, loc: true)
-        Opal::Fragment.new str, scope, loc && @sexp
+      def fragment(str)
+        Opal::Fragment.new str, scope, @sexp
       end
 
       def error(msg)
@@ -89,8 +89,8 @@ module Opal
         scope.top_scope
       end
 
-      def s(type, *children)
-        ::Opal::AST::Node.new(type, children, location: @sexp.loc)
+      def s(*args)
+        @compiler.s(*args)
       end
 
       def expr?

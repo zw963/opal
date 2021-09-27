@@ -70,7 +70,7 @@ module Opal
 
       def compile_children(children, level)
         children.each do |child|
-          line process(child, level), fragment(';', loc: false)
+          line process(child, level), ';'
         end
       end
 
@@ -88,7 +88,7 @@ module Opal
         end
 
         processed_children.reject(&:empty?).each_with_index do |child, idx|
-          push fragment(', ', loc: false) unless idx == 0
+          push ', ' unless idx == 0
           push child
         end
       end
